@@ -37,7 +37,7 @@ class EstimateCostPlugin
         
         function custom_post_type ()
             {
-                
+                register_post_type();
             }
     }
  
