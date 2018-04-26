@@ -16,9 +16,9 @@
 
 // Pour protéger contre accès direct au ficier
 if ( ! defined ( 'ABSPATH' ) )
-    {
-        die;
-    }
+{
+    die;
+}
 
 class EstimateCostPlugin
 {
@@ -40,12 +40,6 @@ class EstimateCostPlugin
     {
         // flush rewrite rules
         flush_rewrite_rules();
-    }
-
-    function desinstaller ()
-    {
-        // Supprimer CPT
-        // Supprimer tous les données de l'extension de la bdd.
     }
         
     function custom_post_type ()
@@ -99,7 +93,6 @@ register_activation_hook( __FILE__ ,array($estimatecostPlugin,'activation'));
 
 register_deactivation_hook( __FILE__ ,array($estimatecostPlugin,'desactivation'));
 
-//Désinstaller
 
 
 
