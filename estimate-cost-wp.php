@@ -14,26 +14,29 @@
  * Text Domain: estimate-cost-wp
 **/
 
-if ( !defined ('ABSPATH'))
+// Pour protéger contre accès direct au ficier
+if ( ! defined ( 'ABSPATH' ) )
     {
-        die(-1);
+        die;
     }
 
 class EstimateCostPlugin
     {
         function activation ()
             {
-
+                // Génerer CPT
+                // flush rewrite rules
             }
 
         function desactivation ()
             {
-
+                // flush rewrite rules
             }
         
         function desinstaller ()
             {
-
+                // Supprimer CPT
+                // Supprimer tous les données de l'extension de la bdd.
             }
         
         function custom_post_type ()
@@ -57,23 +60,6 @@ register_deactivation_hook( __FILE__ ,array($estimatecostPlugin,'desactivation')
 
 //Désinstaller
 
-
-// add_shortcode('exemple','exemple_plugin');
-
-//     function exemple_plugin()
-//         {
-//            $info = "Bonjour, je m'appelle Nathalie";
-//             $info .= '<div class= "container">' ;
-//             $info .= '<div class= "aligncenter"> Ceci est une div </div> </div>';
-//           return $info;
-//         }
-
-/**
- * 
- * 
- * 
- * 
- **/
 // add_action ('admin_menu','Addmenu');
 
 //         function Addmenu()
@@ -82,26 +68,3 @@ register_deactivation_hook( __FILE__ ,array($estimatecostPlugin,'desactivation')
 //                 dashicons-clipboard','55');
 //                 add_submenu_page('estimate-cost','Liste des devis','Liste des devis','4','list-estimate-cost','BackendPageListEstimate');
 //             }
-
-//             function BackendPageNewEstimate ()
-//             {
-//                 ?> 
-//                 <!-- Back end Page Nouveau Devis -->
-              <!-- <h2>Bienvenue sur votre page pour faire un devis.</h2> -->
-                
-                
-//                 <?php
-//             }
-
-//             function BackendPageListEstimate ()
-//             {
-//                 ?> 
-//                  <!-- Back end Page Liste des Devis -->
-
-                      <!-- <h3>Liste de devis.</h3> -->
-                
-                
-//                 <?php
-//             }
-
-?>
