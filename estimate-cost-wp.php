@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Estimate-Cost-Wp
- */
+ **/
 
 /** 
  * Plugin Name: Estimate Cost WP
@@ -10,12 +10,13 @@
  * Author: Boyer Clément
  * Version: 0.1.1
  * Author URI: https://gokami.fr
- * Text Domain: Estimate-Cost-Wp
-*/
+ * License: GPLv2 or later
+ * Text Domain: estimate-cost-wp
+**/
 
 if ( !defined ('ABSPATH'))
     {
-        die;
+        die(-1);
     }
 
 class EstimateCostPlugin
@@ -57,15 +58,15 @@ register_deactivation_hook( __FILE__ ,array($estimatecostPlugin,'desactivation')
 //Désinstaller
 
 
-add_shortcode('exemple','exemple_plugin');
+// add_shortcode('exemple','exemple_plugin');
 
-    function exemple_plugin()
-        {
-           $info = "Bonjour, je m'appelle Nathalie";
-            $info .= '<div class= "container">' ;
-            $info .= '<div class= "aligncenter"> Ceci est une div </div> </div>';
-          return $info;
-        }
+//     function exemple_plugin()
+//         {
+//            $info = "Bonjour, je m'appelle Nathalie";
+//             $info .= '<div class= "container">' ;
+//             $info .= '<div class= "aligncenter"> Ceci est une div </div> </div>';
+//           return $info;
+//         }
 
 /**
  * 
@@ -73,34 +74,34 @@ add_shortcode('exemple','exemple_plugin');
  * 
  * 
  **/
-add_action ('admin_menu','Addmenu');
+// add_action ('admin_menu','Addmenu');
 
-        function Addmenu()
-            {
-                add_menu_page('Devis','Devis','4','estimate-cost','BackendPageNewEstimate','
-                dashicons-clipboard','55');
-                add_submenu_page('estimate-cost','Liste des devis','Liste des devis','4','list-estimate-cost','BackendPageListEstimate');
-            }
+//         function Addmenu()
+//             {
+//                 add_menu_page('Devis','Devis','4','estimate-cost','BackendPageNewEstimate','
+//                 dashicons-clipboard','55');
+//                 add_submenu_page('estimate-cost','Liste des devis','Liste des devis','4','list-estimate-cost','BackendPageListEstimate');
+//             }
 
-            function BackendPageNewEstimate ()
-            {
-                ?> 
-                <!-- Back end Page Nouveau Devis -->
-                <h2>Bienvenue sur votre page pour faire un devis.</h2>
+//             function BackendPageNewEstimate ()
+//             {
+//                 ?> 
+//                 <!-- Back end Page Nouveau Devis -->
+              <!-- <h2>Bienvenue sur votre page pour faire un devis.</h2> -->
                 
                 
-                <?php
-            }
+//                 <?php
+//             }
 
-            function BackendPageListEstimate ()
-            {
-                ?> 
-                 <!-- Back end Page Liste des Devis -->
+//             function BackendPageListEstimate ()
+//             {
+//                 ?> 
+//                  <!-- Back end Page Liste des Devis -->
 
-                <h3>Liste de devis.</h3>
+                      <!-- <h3>Liste de devis.</h3> -->
                 
                 
-                <?php
-            }
+//                 <?php
+//             }
 
 ?>
