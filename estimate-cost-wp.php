@@ -27,6 +27,11 @@ class EstimateCostPlugin
         add_action( 'init', array ( $this , 'custom_post_type' ) );
     }
 
+    function register_admin_scripts()
+    {
+        add_action( 'admin_enqueue_scripts', array ( $this ,'enqueue' ) );
+    }
+
     function activation ()
     {
         // Génerer CPT
@@ -77,11 +82,22 @@ class EstimateCostPlugin
 
         register_post_type('devis', $args );
     }
+
+    function enqueue () 
+    {
+        //css
+        wp_enqueue_style( 'plugincustomcss', plugins_url( '/admin/css/custom.css', __FILE__ ), array (),'1.0.0','all' );
+
+        //js
+        wp_enqueue_script( 'plugincustomjs', plugins_url( '/admin/js/custom.js', __FILE__ ), array (),'1.0.0', true );
+
+    }
 }
  
 if (class_exists('EstimateCostPlugin'))
 {
     $estimatecostPlugin = new EstimateCostPlugin();
+    $estimatecostPlugin->register_admin_scripts();
 }
 
 //Activation
