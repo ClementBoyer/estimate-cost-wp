@@ -61,7 +61,7 @@ add_shortcode('exemple','exemple_plugin');
 
     function exemple_plugin()
         {
-           $info = "Bonjour, je suis un plugin";
+           $info = "Bonjour, je m'appelle Nathalie";
             $info .= '<div class= "container">' ;
             $info .= '<div class= "aligncenter"> Ceci est une div </div> </div>';
           return $info;
