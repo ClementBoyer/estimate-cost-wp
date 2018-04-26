@@ -12,9 +12,9 @@ if ( ! defined ( 'WP_UNINSTALL_PLUGIN' ))
 // Supression des données dans le bdd
 
 $devis = get_posts( array (
-    'post_types'    => 'devis',
+    'post_type'    => 'devis',
     'numberpost'    => -1,
-    'post_status'   => 'any',
+    'post_status'   => array ('any','auto-draft'),
     
 ));
 
