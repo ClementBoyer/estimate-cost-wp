@@ -22,15 +22,97 @@ if ( ! defined ( 'ABSPATH' ) )
 
 class EstimateCostPlugin
 {
-    function __construct()
-    {
-        add_action( 'init', array ( $this , 'custom_post_type' ) );
-    }
-
+    // Permet d'insérer css et js
     function register_admin_scripts()
     {
         add_action( 'admin_enqueue_scripts', array ( $this ,'enqueue' ) );
     }
+    //Créer Menu Back End
+    function create_post_type ()
+    {
+        add_action( 'init', array ( $this , 'custom_post_type' ) );
+    }
+    // Ajout colonne dans hook
+    function columns ()
+    {
+        add_filter( 'manage_devis_posts_columns', array ($this , 'create_columns' ) );
+    }
+    // Ajout colonne dans back end
+    function rows ()
+    {
+        add_action( 'manage_devis_posts_custom_column', array ($this,'create_rows'), 10, 2 );
+    }
+    //Hide publish options box
+    
+    function not_publish_options_metabox ()
+    {
+        add_action('admin_head-post.php', array ($this,'hide_publish_metabox') );
+        add_action('admin_head-post-new.php', array ($this,'hide_publish_metabox') );
+    }
+   
+
+    /*
+    ===============================
+    Hide Options Publish Box
+    ===============================
+    */
+    
+    function hide_publish_metabox ()
+    {
+        $my_post_type= 'devis';
+        global $post;
+        if($post->post_type == $my_post_type)
+        {
+            echo '
+                <style type="text/css">
+                    #misc-publishing-actions,
+                    #minor-publishing-actions{
+                        display:none;
+                    }
+                </style>
+            ';
+        }
+
+    }
+   
+
+
+    /*
+    ===============================
+    Custom Column 
+    ===============================
+    */
+
+    function create_rows ( $column, $post_id ) 
+    {
+        switch ( $column ):
+            case 'shortcode':
+                echo 'Devis ';// Mettre le code shortcode pour afficher .
+            break;
+          default:
+            break;
+        endswitch;
+        
+    }
+
+    function create_columns($column)
+    {
+        // // Création colonne
+
+        $newColumns = array ();
+	    $newColumns['title'] = 'Titre';
+	    $newColumns['shortcode'] = 'Shorcode';
+	    $newColumns['author'] = 'Auteur';
+	    $newColumns['date'] = 'Date';
+	    return $newColumns;
+    
+    }
+
+    /*
+    ===============================
+    Activation Plugin  
+    ===============================
+    */
 
     function activation ()
     {
@@ -40,12 +122,22 @@ class EstimateCostPlugin
         flush_rewrite_rules();
     }
 
+    /*
+    ===============================
+    Désactivation Plugin  
+    ===============================
+    */
     function desactivation ()
     {
         // flush rewrite rules
         flush_rewrite_rules();
     }
-        
+    /*
+    ===============================
+    Custom Post Type   
+    ===============================
+    */
+    // Insfrastrure pour créer Menu avec Create Modified and Delete de Wordpress
     function custom_post_type ()
     {
         $labels = array(
@@ -70,10 +162,10 @@ class EstimateCostPlugin
             'has_archive'           => false,
             'publicly_queryable'    => true,
             'query_var'             => true,
-            'rewrite'               => false,
+            'rewrite'               => array ('slug'=>'devis'),
             'capability_type'       => 'page',
             'hierarchical'          => false,
-            'supports'              => array ('title','editor','revision','custom-fiels'),
+            'supports'              => array ('title','editor','revision','custom-fields'),
             'taxonomies'            => array (''),
             'menu_position'         => 55,
             'menu_icon'             => 'dashicons-clipboard',
@@ -83,7 +175,14 @@ class EstimateCostPlugin
         register_post_type('devis', $args );
     }
 
-    function enqueue () 
+    /*
+    ===============================
+    Gestion Scripts   
+    ===============================
+    */
+
+    // Fonction pour charger scripts dans partie Admin.
+    function enqueue ($hook) 
     {
         //css
         wp_enqueue_style( 'plugincustomcss', plugins_url( '/admin/css/custom.css', __FILE__ ), array (),'1.0.0','all' );
@@ -93,11 +192,19 @@ class EstimateCostPlugin
 
     }
 }
- 
+/*
+===============================
+Demarrage Functions  
+===============================
+*/
 if (class_exists('EstimateCostPlugin'))
-{
+{   
     $estimatecostPlugin = new EstimateCostPlugin();
     $estimatecostPlugin->register_admin_scripts();
+    $estimatecostPlugin->create_post_type();
+    $estimatecostPlugin->columns();
+    $estimatecostPlugin->rows();
+    $estimatecostPlugin->not_publish_options_metabox();  
 }
 
 //Activation
@@ -111,12 +218,4 @@ register_deactivation_hook( __FILE__ ,array($estimatecostPlugin,'desactivation')
 
 
 
-// add_action ('admin_menu','Addmenu');
-
-//         function Addmenu()
-//             {
-//                 add_menu_page('Devis','Devis','4','estimate-cost','BackendPageNewEstimate','
-//                 dashicons-clipboard','55');
-//                 add_submenu_page('estimate-cost','Liste des devis','Liste des devis','4','list-estimate-cost','BackendPageListEstimate');
-//             }
 
