@@ -42,12 +42,20 @@ class EstimateCostPlugin
     {
         add_action( 'manage_devis_posts_custom_column', array ($this,'create_rows'), 10, 2 );
     }
-    //Hide publish options box
+    // Cache options publier Meta box
     
     function not_publish_options_metabox ()
     {
         add_action('admin_head-post.php', array ($this,'hide_publish_metabox') );
         add_action('admin_head-post-new.php', array ($this,'hide_publish_metabox') );
+    }
+
+    // Cache buttons et eléments éditor Wordpress
+
+    function not_buttons_editor ()
+    {
+        add_action('admin_head-post.php', array ($this,'hide_options_editor') );
+        add_action('admin_head-post-new.php', array ($this,'hide_options_editor') );
     }
    
 
@@ -69,8 +77,32 @@ class EstimateCostPlugin
                     #minor-publishing-actions{
                         display:none;
                     }
-                </style>
-            ';
+                </style>';
+        }
+
+    }
+
+     /*
+    ===============================
+    Hide Options Editor 
+    ===============================
+    */
+
+    function hide_options_editor ()
+    {
+        $my_post_type= 'devis';
+        global $post;
+        if($post->post_type == $my_post_type)
+        {
+            echo '
+                <style type="text/css">
+                    #mceu_28,
+                    #mceu_31,
+                    #content-html,
+                    #insert-media-button{
+                        display:none;
+                    }
+                </style>';
         }
 
     }
@@ -204,7 +236,8 @@ if (class_exists('EstimateCostPlugin'))
     $estimatecostPlugin->create_post_type();
     $estimatecostPlugin->columns();
     $estimatecostPlugin->rows();
-    $estimatecostPlugin->not_publish_options_metabox();  
+    $estimatecostPlugin->not_publish_options_metabox(); 
+    $estimatecostPlugin->not_buttons_editor(); 
 }
 
 //Activation
