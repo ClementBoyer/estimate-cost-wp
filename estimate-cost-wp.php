@@ -57,7 +57,44 @@ class EstimateCostPlugin
         add_action('admin_head-post.php', array ($this,'hide_options_editor') );
         add_action('admin_head-post-new.php', array ($this,'hide_options_editor') );
     }
+
+    // Shortcode test
+
+    function shortcode ()
+    {
+        add_shortcode( 'devis', array ($this,'devis_shortcode' ) );
+    }
    
+
+    /*
+    ===============================
+    Meta Box
+    ===============================
+    */
+    // function shortcode_meta_box ()
+    // {
+    //     add_meta_box( 'shortcode_view', title, callback, screen, context, priority, callback_args );
+    // }
+
+    /*
+    ===============================
+    Shortcode
+    ===============================
+    */
+    function devis_shortcode ($atts)
+    {
+       
+        shortcode_atts( array (
+            'id' => '',
+        ), $atts );
+
+        $id=$atts['id'];
+
+        $content = get_post_field( 'post_content',$id );
+
+        return $content;
+
+    }
 
     /*
     ===============================
@@ -98,7 +135,6 @@ class EstimateCostPlugin
                 <style type="text/css">
                     #mceu_28,
                     #mceu_31,
-                    #content-html,
                     #insert-media-button{
                         display:none;
                     }
@@ -119,7 +155,10 @@ class EstimateCostPlugin
     {
         switch ( $column ):
             case 'shortcode':
-                echo 'Devis ';// Mettre le code shortcode pour afficher .
+                // Shortcode view
+                $id = get_the_ID();
+                $title= get_the_title( );
+                echo '[devis id ='.'"'.$id.'"'.' titre ='.'"'.$title.'"'.'] ';
             break;
           default:
             break;
@@ -133,7 +172,7 @@ class EstimateCostPlugin
 
         $newColumns = array ();
 	    $newColumns['title'] = 'Titre';
-	    $newColumns['shortcode'] = 'Shorcode';
+	    $newColumns['shortcode'] = 'Shortcode';
 	    $newColumns['author'] = 'Auteur';
 	    $newColumns['date'] = 'Date';
 	    return $newColumns;
@@ -238,6 +277,7 @@ if (class_exists('EstimateCostPlugin'))
     $estimatecostPlugin->rows();
     $estimatecostPlugin->not_publish_options_metabox(); 
     $estimatecostPlugin->not_buttons_editor(); 
+    $estimatecostPlugin->shortcode();
 }
 
 //Activation
