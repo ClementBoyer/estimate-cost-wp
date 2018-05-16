@@ -58,7 +58,7 @@ class EstimateCostPlugin
         add_action('admin_head-post-new.php', array ($this,'hide_options_editor') );
     }
 
-    // Shortcode test
+    // Shortcode content devis
 
     function shortcode ()
     {
@@ -78,7 +78,7 @@ class EstimateCostPlugin
 
     /*
     ===============================
-    Shortcode
+    Shortcode content devis
     ===============================
     */
     function devis_shortcode ($atts)
@@ -90,7 +90,7 @@ class EstimateCostPlugin
 
         $id=$atts['id'];
 
-        $content = get_post_field( 'post_content',$id );
+        $content = '<div class="container">'.get_post_field( 'post_content',$id ).'</div>';
 
         return $content;
 
