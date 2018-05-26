@@ -65,6 +65,56 @@ class EstimateCostPlugin
         add_shortcode( 'devis', array ($this,'devis_shortcode' ) );
     }
    
+    // Boutons TinyMCE
+
+    function bouton_tinymce ()
+    {
+        add_action( 'admin_head',array ($this,'custom_boutons_tinymce') );
+    }
+
+    /*
+    ===============================
+    Boutons TinyMCE
+    ===============================
+    */
+    function custom_boutons_tinymce()
+    {
+        global $typenow ;
+        // Verification utilisateur permision
+        if (! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ))
+        {
+            return false;
+        }
+        //Verification post type
+        if (! in_array($typenow,array ('devis') ))
+        {
+            return;
+        }
+        // Check tinymce enable
+        if ( get_user_option( 'rich_editing' ) == 'true')
+        {
+            add_filter( 'mce_external_plugins',array ($this,'custom_add_tinymce_plugin'));
+            add_filter( 'mce_buttons', array ($this,'custom_add_tinymce_button' ));
+        }
+
+    }
+
+    function custom_add_tinymce_plugin($plugin_array)
+    {
+        $my_post_type = 'devis';
+        global $post;
+        if($post->post_type == $my_post_type)
+        {
+            $plugin_array['custom_button'] = plugins_url( '/admin/js/text-button.js', __FILE__ );
+            return $plugin_array;
+        }
+    }
+
+    function custom_add_tinymce_button($button)
+    {
+        array_push ($button,'|','custom_button');
+        return $button;
+    }
 
     /*
     ===============================
@@ -95,7 +145,7 @@ class EstimateCostPlugin
         return $content;
 
     }
-
+    
     /*
     ===============================
     Hide Options Publish Box
@@ -133,7 +183,7 @@ class EstimateCostPlugin
         {
             echo '
                 <style type="text/css">
-                    #mceu_28,
+                    #mceu_29-body,
                     #mceu_31,
                     #insert-media-button{
                         display:none;
@@ -168,7 +218,7 @@ class EstimateCostPlugin
 
     function create_columns($column)
     {
-        // // Création colonne
+        // Création colonne
 
         $newColumns = array ();
 	    $newColumns['title'] = 'Titre';
@@ -278,6 +328,7 @@ if (class_exists('EstimateCostPlugin'))
     $estimatecostPlugin->not_publish_options_metabox(); 
     $estimatecostPlugin->not_buttons_editor(); 
     $estimatecostPlugin->shortcode();
+    $estimatecostPlugin->bouton_tinymce();
 }
 
 //Activation
