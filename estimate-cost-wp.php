@@ -23,14 +23,33 @@ if ( ! defined ( 'ABSPATH' ) )
 class EstimateCostPlugin
 {
     // Permet d'insérer css et js
+    //admin
     function register_admin_scripts()
     {
-        add_action( 'admin_enqueue_scripts', array ( $this ,'enqueue' ) );
+        add_action( 'admin_enqueue_scripts', array ( $this ,'enqueue_admin' ) );
+
     }
+    //front
+    function register_front_scripts()
+    {
+        add_action( 'wp_enqueue_scripts', array ( $this ,'enqueue_front' ) );
+
+    }
+
     //Créer Menu Back End
     function create_post_type ()
     {
         add_action( 'init', array ( $this , 'custom_post_type' ) );
+    }
+    //Créer Menu Back End
+    function active_submenu_css ()
+    {
+        add_action( 'admin_menu', array ($this,'add_submenu_css') );
+        add_action( 'admin_init', array ($this,'custom_setting') );
+    }
+    function add_submenu_css ()
+    {
+        add_submenu_page( 'edit.php?post_type=devis', 'Options CSS', 'Custom CSS', 'manage_options', 'options-submenu-css', array ($this,'submenu_css' ) );
     }
     // Ajout colonne dans hook
     function columns ()
@@ -95,6 +114,7 @@ class EstimateCostPlugin
         {
             add_filter( 'mce_external_plugins',array ($this,'custom_add_tinymce_plugin'));
             add_filter( 'mce_buttons', array ($this,'custom_add_tinymce_button' ));
+
         }
 
     }
@@ -105,16 +125,26 @@ class EstimateCostPlugin
         global $post;
         if($post->post_type == $my_post_type)
         {
-            $plugin_array['custom_button'] = plugins_url( '/admin/js/text-button.js', __FILE__ );
+            $plugin_array['text_button'] = plugins_url( '/admin/js/text_button.js', __FILE__ );
+            $plugin_array['tel_button'] = plugins_url( '/admin/js/tel_button.js', __FILE__ );
+            $plugin_array['email_button'] = plugins_url( '/admin/js/email_button.js', __FILE__ );
+            $plugin_array['produit_button'] = plugins_url( '/admin/js/produit_button.js', __FILE__ ); 
+            $plugin_array['submit_button'] = plugins_url( '/admin/js/submit_button.js', __FILE__ );  
+
             return $plugin_array;
         }
     }
 
     function custom_add_tinymce_button($button)
     {
-        array_push ($button,'|','custom_button');
+        array_push ($button,'|','text_button');
+        array_push ($button,'tel_button');
+        array_push ($button,'email_button');
+        array_push ($button,'produit_button');
+        array_push ($button,'|','|','submit_button');
         return $button;
     }
+
 
     /*
     ===============================
@@ -140,7 +170,7 @@ class EstimateCostPlugin
 
         $id=$atts['id'];
 
-        $content = '<div class="container">'.get_post_field( 'post_content',$id ).'</div>';
+        $content = '<div class="container"><form>'.get_post_field( 'post_content',$id ).'</form></div>';
 
         return $content;
 
@@ -183,8 +213,7 @@ class EstimateCostPlugin
         {
             echo '
                 <style type="text/css">
-                    #mceu_29-body,
-                    #mceu_31,
+                    #mceu_33,
                     #insert-media-button{
                         display:none;
                     }
@@ -253,6 +282,44 @@ class EstimateCostPlugin
         // flush rewrite rules
         flush_rewrite_rules();
     }
+      /*
+    ===============================
+    Menu CSS Custom Post Type   
+    ===============================
+    */
+    //Submenu custom CSS
+    function submenu_css()
+    {
+        $templates_css= dirname(__FILE__).'/admin/templates/custom_css.php';
+        require_once($templates_css);
+    }
+    //Custom setting CSS
+    function custom_setting()
+    {
+        register_setting( 'custom-css-options', 'devis_css' );
+
+        add_settings_section( 'custom-css-section', 'Custom CSS', array ($this,'custom_css_section_callback'), 'options-submenu-css' );
+
+        add_settings_field( 'custom-css', 'Insérer votre CSS', array ($this,'custom_css_callback'), 'options-submenu-css', 'custom-css-section' );
+    }
+    // Callback sanitize register
+    // function sanitize_custom_css_callback($input)
+    // {
+    //     $output= esc_textarea( $input );
+    //     return $output;
+    // }
+    // Callback section
+    function custom_css_section_callback ()
+    {
+        echo 'Customiser votre devis avec du CSS';
+    }
+
+    function custom_css_callback()
+    {
+        $css = get_option('devis_css');
+	    $css = ( empty($css) ? '/* Custom CSS */' : $css );
+        echo '<div id="CustomCSS">'.$css.'</div>';
+    }
     /*
     ===============================
     Custom Post Type   
@@ -303,13 +370,33 @@ class EstimateCostPlugin
     */
 
     // Fonction pour charger scripts dans partie Admin.
-    function enqueue ($hook) 
+
+    function enqueue_admin ($hook) 
     {
         //css
         wp_enqueue_style( 'plugincustomcss', plugins_url( '/admin/css/custom.css', __FILE__ ), array (),'1.0.0','all' );
 
+        // template custom css
+        if ( 'devis_page_options-submenu-css' == $hook)
+        {
+            //css
+            wp_enqueue_style( 'ace', plugins_url( '/admin/css/custom.ace.css', __FILE__ ), array (),'1.0.0','all' );
+            //js
+            wp_enqueue_script( 'ace', plugins_url( '/admin/js/ace.js', __FILE__ ), array ('jquery'),'1.2.1', true );
+            wp_enqueue_script( 'plugincustomjs', plugins_url( '/admin/js/custom.js', __FILE__ ), array (),'1.0.0', true );
+
+        }
+    }
+
+    // Fonction pour charger scripts dans partie Client.
+
+    function enqueue_front ($hook) 
+    {
+        //css
+        wp_enqueue_style( 'bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css',array (),'4.1.1', 'all' );
+
         //js
-        wp_enqueue_script( 'plugincustomjs', plugins_url( '/admin/js/custom.js', __FILE__ ), array (),'1.0.0', true );
+        wp_enqueue_script( 'bootstrap', 'https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js', array(),'4.1.1', true );
 
     }
 }
@@ -322,11 +409,13 @@ if (class_exists('EstimateCostPlugin'))
 {   
     $estimatecostPlugin = new EstimateCostPlugin();
     $estimatecostPlugin->register_admin_scripts();
+    $estimatecostPlugin->register_front_scripts();
     $estimatecostPlugin->create_post_type();
+    $estimatecostPlugin->active_submenu_css();
     $estimatecostPlugin->columns();
     $estimatecostPlugin->rows();
     $estimatecostPlugin->not_publish_options_metabox(); 
-    $estimatecostPlugin->not_buttons_editor(); 
+   // $estimatecostPlugin->not_buttons_editor(); 
     $estimatecostPlugin->shortcode();
     $estimatecostPlugin->bouton_tinymce();
 }
