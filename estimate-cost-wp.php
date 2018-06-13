@@ -383,8 +383,7 @@ class EstimateCostPlugin
             $plugin_array['tel_button'] = plugins_url( '/admin/js/tel_button.js', __FILE__ );
             $plugin_array['email_button'] = plugins_url( '/admin/js/email_button.js', __FILE__ );
             $plugin_array['produit_button'] = plugins_url( '/admin/js/produit_button.js', __FILE__ ); 
-            $plugin_array['submit_button'] = plugins_url( '/admin/js/submit_button.js', __FILE__ );  
-
+            $plugin_array['envoyer_button'] = plugins_url( '/admin/js/envoyer_button.js', __FILE__ );  
             return $plugin_array;
         }
     }
@@ -395,7 +394,7 @@ class EstimateCostPlugin
         array_push ($button,'tel_button');
         array_push ($button,'email_button');
         array_push ($button,'produit_button');
-        array_push ($button,'|','|','submit_button');
+        array_push ($button,'|','envoyer_button');
         return $button;
     }
 
@@ -517,7 +516,7 @@ if (class_exists('EstimateCostPlugin'))
     $estimatecostPlugin->columns();
     $estimatecostPlugin->rows();
     $estimatecostPlugin->not_publish_options_metabox(); 
-    $estimatecostPlugin->not_buttons_editor(); 
+   // $estimatecostPlugin->not_buttons_editor(); 
     $estimatecostPlugin->shortcode();
     $estimatecostPlugin->bouton_tinymce();
     $estimatecostPlugin->devis_post_mail();
