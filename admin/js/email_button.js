@@ -15,6 +15,7 @@
                 +'<label class="labeltext labelmail">Email :</label>'
                 +'<br>'
                 +'<input id="email" name="email" class="form-control" type="email" placeholder ="Votre email" pattern="[a-z0-9.-]+@[a-z0-9]+\.[a-z]{2,3}$" required></div>'
+                +''
 
     
             );

@@ -63,9 +63,10 @@
             +'<h5 class="text-center mt-3">'+e.data.combobox + '</h5>'
             +'<p>'+ e.data.description +'</p>'
             +'<label> Quantité : </label>'
-            +'<input type="number" name="nbr" min=0>'
+            +'<input type="number" name="'+e.data.nom+' '+'nbr" min=0>'
             +'</div>'//.caption
             +'</div>'//.thumbnail
+            +''
             );
 
             
@@ -75,7 +76,7 @@
       });
     });
   })();
-
+  // Fonction pour charger image de Wp-media
   jQuery(document).ready(function($){
     $(document).on('click', '.mce-my_upload_button', upload_image_tinymce);
 

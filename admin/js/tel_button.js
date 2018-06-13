@@ -15,6 +15,7 @@
                 +'<label class="labeltext labeltel">Téléphone :</label>'
                 +'<br>'
                 +'<input id="telephone" name="telephone" class="form-control" type="tel" placeholder ="Votre téléphone" pattern="^0[1-9][0-9]{8}$" required></div>'
+                +''
 
     
             );
