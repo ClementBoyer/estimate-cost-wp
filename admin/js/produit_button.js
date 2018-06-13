@@ -62,8 +62,8 @@
             +'<div class="caption">'
             +'<h5 class="text-center mt-3">'+e.data.combobox + '</h5>'
             +'<p>'+ e.data.description +'</p>'
-            +'<label> Quantité : </label>'
-            +'<input type="number" name="'+e.data.nom+' '+'nbr" min=0>'
+            +'<label class="labeltext"> Quantité : </label>'
+            +'<input class="form-control" type="number" name="'+e.data.nom+' '+'nbr" min=0>'
             +'</div>'//.caption
             +'</div>'//.thumbnail
             +''
